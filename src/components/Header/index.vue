@@ -35,6 +35,7 @@
           <input
             type="text"
             id="autocomplete"
+            v-model="keyword"
             class="input-error input-xxlarge"
           />
           <button
@@ -53,9 +54,23 @@
 <script>
 export default {
   name: "Header",
+  data() {
+    return {
+      keyword: "",
+    };
+  },
   methods: {
     search() {
-      this.$router.push("/search");
+      // this.$router.push("/search");
+      // console.log(this.$route);
+      const queryDate = this.$route.query;
+      this.$router.push({
+        name: "search",
+        query: {
+          ...queryDate,
+          keyword: this.keyword || undefined, //路由中当匹配值为undefined时，路由自动忽略匹配项
+        },
+      });
     },
   },
 };

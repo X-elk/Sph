@@ -1,14 +1,16 @@
 <template>
   <div>
     <TodoBar></TodoBar>
+
     <TypeNav></TypeNav>
+
     <Main></Main>
   </div>
 </template>
 
 <script>
 import TodoBar from "./TodoBar";
-import TypeNav from "../Home/TypeNav";
+import TypeNav from "../../components/TypeNav";
 import Main from "./Main";
 export default {
   name: "Search",
@@ -20,5 +22,5 @@ export default {
 };
 </script>
 
-<style>
+<style lang='less' scoped>
 </style>

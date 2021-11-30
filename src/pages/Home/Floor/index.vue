@@ -1,14 +1,14 @@
 <template>
   <div class="floor">
-    <div class="py-container">
+    <div class="py-container" v-for="item in floorData" :key="item.id">
       <div class="title clearfix">
-        <h3 class="fl">家用电器</h3>
+        <h3 class="fl">{{ item.name }}</h3>
         <div class="fr">
           <ul class="nav-tabs clearfix">
-            <li class="active">
-              <a href="#tab1" data-toggle="tab">热门</a>
+            <li class="active" v-for="nl in item.navList" :key="nl.text">
+              <a :href="nl.url" data-toggle="tab">{{ nl.text }}</a>
             </li>
-            <li>
+            <!-- <li>
               <a href="#tab2" data-toggle="tab">大家电</a>
             </li>
             <li>
@@ -25,7 +25,7 @@
             </li>
             <li>
               <a href="#tab7" data-toggle="tab">高端电器</a>
-            </li>
+            </li> -->
           </ul>
         </div>
       </div>
@@ -34,20 +34,26 @@
           <div class="floor-1">
             <div class="blockgary">
               <ul class="jd-list">
-                <li>节能补贴</li>
-                <li>4K电视</li>
+                <li v-for="kw in item.keywords" :key="kw.index">
+                  {{ kw }}
+                </li>
+                <!-- <li>4K电视</li>
                 <li>空气净化器</li>
                 <li>IH电饭煲</li>
                 <li>滚筒洗衣机</li>
-                <li>电热水器</li>
+                <li>电热水器</li> -->
               </ul>
-              <img src="./images/floor-1-1.png" />
+              <img :src="item.imgUrl" />
             </div>
             <div class="floorBanner">
-              <div class="swiper-container" id="floor1Swiper">
+              <div class="swiper-container swiper-little" id="floor1Swiper">
                 <div class="swiper-wrapper">
-                  <div class="swiper-slide">
-                    <img src="./images/floor-1-b01.png" />
+                  <div
+                    class="swiper-slide"
+                    v-for="sw in item.carouselList"
+                    :key="sw.id"
+                  >
+                    <img :src="sw.imgUrl" />
                   </div>
                   <!-- <div class="swiper-slide">
                     <img src="./images/floor-1-b02.png" />
@@ -67,22 +73,22 @@
             <div class="split">
               <span class="floor-x-line"></span>
               <div class="floor-conver-pit">
-                <img src="./images/floor-1-2.png" />
+                <img :src="item.recommendList[0]" />
               </div>
               <div class="floor-conver-pit">
-                <img src="./images/floor-1-3.png" />
+                <img :src="item.recommendList[1]" />
               </div>
             </div>
             <div class="split center">
-              <img src="./images/floor-1-4.png" />
+              <img :src="item.bigImg" />
             </div>
             <div class="split">
               <span class="floor-x-line"></span>
               <div class="floor-conver-pit">
-                <img src="./images/floor-1-5.png" />
+                <img :src="item.recommendList[2]" />
               </div>
               <div class="floor-conver-pit">
-                <img src="./images/floor-1-6.png" />
+                <img :src="item.recommendList[3]" />
               </div>
             </div>
           </div>
@@ -93,8 +99,43 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+// 引入轮播图样式
+import "swiper/css/swiper.min.css";
+import Swiper from "swiper";
+
 export default {
   name: "Floor",
+  computed: {
+    ...mapState("home", ["floorData"]),
+  },
+  mounted() {
+    this.$store.dispatch("home/getFloorsDate");
+  },
+  watch: {
+    // floorData() {
+    //   console.log("floorData", this.floorData);
+    // },
+    floorData() {
+      this.$nextTick(() => {
+        new Swiper(".swiper-little", {
+          slidesPerView: 1,
+          spaceBetween: 30,
+          loop: true,
+          speed: 1000,
+          autoplay: true,
+          pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+          },
+          navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+          },
+        });
+      });
+    },
+  },
 };
 </script>
 
@@ -223,7 +264,6 @@ export default {
               }
             }
           }
-
           .center {
             border: 1px solid #e4e4e4;
           }

@@ -3,10 +3,14 @@
     <div class="sortList clearfix">
       <div class="center">
         <!--banner轮播-->
-        <div class="swiper-container" id="mySwiper">
+        <div class="swiper-container swiper-banner" id="mySwiper">
           <div class="swiper-wrapper">
-            <div class="swiper-slide">
-              <img src="./images/banner1.jpg" />
+            <div
+              class="swiper-slide"
+              v-for="item in bannerListData"
+              :key="item.id"
+            >
+              <img :src="item.imgUrl" />
             </div>
             <!-- <div class="swiper-slide">
               <img src="./images/banner2.jpg" />
@@ -100,12 +104,72 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+//引入swiper，轮播图效果
+import "swiper/css/swiper.min.css";
+import Swiper from "swiper";
 export default {
   name: "ListContainer",
+  computed: {
+    // 将图片放到public中，不然不会显示
+    // 从本地拿到的，不是从服务器拿到，最终整合到public中
+    ...mapState("home", ["bannerListData"]),
+  },
+  mounted() {
+    this.$store.dispatch("home/getBannerListData");
+
+    // new Swiper('.swiper-container', {
+    //   slidesPerView: 1,
+    //   spaceBetween: 30,
+    //   loop: true,
+    //   pagination: {
+    //     el: '.swiper-pagination',
+    //     clickable: true,
+    //   },
+    //   navigation: {
+    //     nextEl: '.swiper-button-next',
+    //     prevEl: '.swiper-button-prev',
+    //   },
+    // })
+  },
+  // 调用轮播图效果
+  /* 
+ 方案一：mounted中直接调用，发现不能用，调用时机不对，请求是异步，当数据还没有请求完成时，代码已经执行
+ 方案二：加定时器，但不是最优解，因为无法保证定时器设置多长时间，根据网速不同，请求数据的速度也会不同
+ 方案三: 在update中实现，但发现每当数据更新函数就会实例一个对象，太消耗不必要的资源
+ 方案四：在watch中实现监听效果，只侦听数据源来触发 
+  */
+  watch: {
+    bannerListData() {
+      this.$nextTick(() => {
+        // 当数据一发生变化立即触发
+        new Swiper(".swiper-banner", {
+          slidesPerView: 1,
+          spaceBetween: 30,
+          loop: true,
+          speed: 1000,
+          autoplay: true,
+          pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+          },
+          navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+          },
+        });
+      });
+    },
+  },
 };
 </script>
 
 <style lang='less' scoped>
+.swiper-banner {
+  --swiper-theme-color: #c5f1fb; /* 两边按钮颜色 */
+  --swiper-navigation-color: #d8fcff; /* 下面小按钮颜色 */
+  --swiper-navigation-size: 30px; /* 设置按钮大小 */
+}
 .list-container {
   width: 1200px;
   margin: 0 auto;

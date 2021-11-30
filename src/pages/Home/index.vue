@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import TypeNav from "./TypeNav";
+import TypeNav from "@/components/TypeNav";
 import ListContainer from "./ListContainer";
 import Recommend from "./Recommend";
 import Rank from "./Rank";

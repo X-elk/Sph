@@ -4,24 +4,39 @@
       <div class="nav-left">
         <h2 class="all">全部商品分类</h2>
         <div class="sort">
-          <div class="all-sort-list2">
+          <div class="all-sort-list2" :style="sortisshow" @click="btnSearch">
             <div
-              class="item"    
+              class="item"
               v-for="item in categoryList.slice(0, -2)"
               :key="item.categoryId"
             >
               <h3>
-                <a href="">{{ item.categoryName }}</a>
+                <a
+                  data-level="1"
+                  :data-name="item.categoryName"
+                  :data-id="item.categoryId"
+                  >{{ item.categoryName }}</a
+                >
               </h3>
               <div class="item-list clearfix">
                 <div class="subitem">
                   <dl v-for="dl in item.categoryChild" :key="dl.categoryId">
                     <dt class="fore">
-                      <a href="">{{ dl.categoryName }}</a>
+                      <a
+                        data-level="2"
+                        :data-name="dl.categoryName"
+                        :data-id="dl.categoryId"
+                        >{{ dl.categoryName }}</a
+                      >
                     </dt>
                     <dd>
                       <em v-for="dd in dl.categoryChild" :key="dd.categoryId">
-                        <a href="">{{ dd.categoryName }}</a>
+                        <a
+                          data-level="3"
+                          :data-name="dd.categoryName"
+                          :data-id="dd.categoryId"
+                          >{{ dd.categoryName }}</a
+                        >
                       </em>
                       <!-- <em>
                         <a href="">文学</a>
@@ -1683,6 +1698,7 @@
           </div>
           <!-- <button @click="fn">点击</button> -->
         </div>
+        <!-- </div> -->
       </div>
       <nav class="nav">
         <a href="###">服装城</a>
@@ -1700,6 +1716,7 @@
 
 <script>
 // import ajax from "../../../api/ajax.js";
+
 import { mapState } from "vuex";
 export default {
   name: "TypeNav",
@@ -1709,8 +1726,30 @@ export default {
     // categoryList() {
     //   return this.$store.state.home.categoryList;
     // },
+    sortisshow() {
+      return this.$route.path !== "/search"
+        ? "height: 461px; opacity: 1 !important;"
+        : "";
+    },
   },
+  methods: {
+    btnSearch(event) {
+      // this.$router.push("/search");
+      const { id, name, level } = event.target.dataset;
 
+      if (!id) return;
+      const queryDate = this.$route.query;
+      console.log(queryDate);
+      this.$router.push({
+        name: "search",
+        query: {
+          categoryName: name,
+          ["category" + level + "Id"]: id,
+          ...queryDate,
+        },
+      });
+    },
+  },
   mounted() {
     // 请求接口及处理
     // ajax.get("/api/product/getBaseCategoryList").then(
@@ -1722,8 +1761,8 @@ export default {
     // );
     // 模块化的方式进行派发（与请求函数进行连接触发）
 
-    this.$store.dispatch("home/reqtypeNavDate");
-    console.log("asdfghjk", this.categoryList);
+    this.$store.dispatch("home/gettypeNavDate");
+    // console.log("asdfghjk", this.categoryList);
   },
 };
 </script>
@@ -1736,6 +1775,7 @@ export default {
     width: 1200px;
     margin: 0 auto;
     display: flex;
+
     position: relative;
 
     .all {
@@ -1748,6 +1788,11 @@ export default {
       font-size: 14px;
       font-weight: bold;
     }
+    :hover .sort .all-sort-list2 {
+      height: 461px;
+      opacity: 1;
+      transition: height 0.5s, opacity ease-in 0.7s;
+    }
 
     .nav {
       a {
@@ -1758,24 +1803,24 @@ export default {
         color: #333;
       }
     }
-
     .sort {
-      position: absolute;
       left: 0;
       top: 45px;
       width: 210px;
-      height: 461px;
       position: absolute;
       background: #fafafa;
       z-index: 999;
+      border-top: 2px solid #e1251b;
 
       .all-sort-list2 {
+        opacity: 0;
+        height: 0px;
+        overflow: hidden;
         .item {
           h3 {
             line-height: 30px;
             font-size: 14px;
             font-weight: 400;
-            overflow: hidden;
             padding: 0 20px;
             margin: 0;
 
@@ -1837,8 +1882,9 @@ export default {
               }
             }
           }
-
           &:hover {
+            background-color: rgb(235, 235, 235);
+            cursor: pointer;
             .item-list {
               display: block;
             }

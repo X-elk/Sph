@@ -20,10 +20,10 @@ Router.prototype.push = function push(location, onResolve, onReject) {
 
 export default new Router({
     routes: [
-        { path: '/home', component: Home },
-        { path: '/login', component: Login },
-        { path: '/register', component: Register },
-        { path: '/search', component: Search },
+        { name: 'home', path: '/home', component: Home },
+        { name: 'login', path: '/login', component: Login },
+        { name: 'register', path: '/register', component: Register },
+        { name: 'search', path: '/search', component: Search },
         { path: '/', redirect: '/home' }
 
     ]
