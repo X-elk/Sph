@@ -1739,7 +1739,6 @@ export default {
 
       if (!id) return;
       const queryDate = this.$route.query;
-      console.log(queryDate);
       this.$router.push({
         name: "search",
         query: {

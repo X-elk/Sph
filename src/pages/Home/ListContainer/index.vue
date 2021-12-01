@@ -166,8 +166,8 @@ export default {
 
 <style lang='less' scoped>
 .swiper-banner {
-  --swiper-theme-color: #c5f1fb; /* 两边按钮颜色 */
-  --swiper-navigation-color: #d8fcff; /* 下面小按钮颜色 */
+  --swiper-theme-color: #c5f1fb; /* 下面小按钮颜色 */
+  --swiper-navigation-color: #d8fcff; /* 两边按钮颜色 */
   --swiper-navigation-size: 30px; /* 设置按钮大小 */
 }
 .list-container {

@@ -12,3 +12,5 @@ export const reqtypeNavDate = () => ajax.get("/api/product/getBaseCategoryList")
 export const reqBannerListData = () => mockAjax.get('/banner')
 // 获取楼层数据
 export const reqFloorsDate = () => mockAjax.get('/floor')
+//获取搜索页面的数据
+export const reqSearchDate = (searchData) => ajax.post('/api/list', searchData)

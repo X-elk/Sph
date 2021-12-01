@@ -1,6 +1,6 @@
 <template>
   <div class="floor">
-    <div class="py-container" v-for="item in floorData" :key="item.id">
+    <div class="py-container">
       <div class="title clearfix">
         <h3 class="fl">{{ item.name }}</h3>
         <div class="fr">
@@ -34,7 +34,7 @@
           <div class="floor-1">
             <div class="blockgary">
               <ul class="jd-list">
-                <li v-for="kw in item.keywords" :key="kw.index">
+                <li v-for="kw in item.keywords" :key="kw">
                   {{ kw }}
                 </li>
                 <!-- <li>4K电视</li>
@@ -46,7 +46,11 @@
               <img :src="item.imgUrl" />
             </div>
             <div class="floorBanner">
-              <div class="swiper-container swiper-little" id="floor1Swiper">
+              <div
+                class="swiper-container swiperbtnstyle"
+                :class="swiperName"
+                id="floor1Swiper"
+              >
                 <div class="swiper-wrapper">
                   <div
                     class="swiper-slide"
@@ -99,47 +103,43 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
 // 引入轮播图样式
 import "swiper/css/swiper.min.css";
 import Swiper from "swiper";
-
 export default {
   name: "Floor",
-  computed: {
-    ...mapState("home", ["floorData"]),
-  },
+  props: ["item", "swiperName"],
   mounted() {
-    this.$store.dispatch("home/getFloorsDate");
-  },
-  watch: {
-    // floorData() {
-    //   console.log("floorData", this.floorData);
-    // },
-    floorData() {
-      this.$nextTick(() => {
-        new Swiper(".swiper-little", {
-          slidesPerView: 1,
-          spaceBetween: 30,
-          loop: true,
-          speed: 1000,
-          autoplay: true,
-          pagination: {
-            el: ".swiper-pagination",
-            clickable: true,
-          },
-          navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
-          },
-        });
-      });
-    },
+    // console.log("请求的数据", this.item);
+    // console.log("ads", this.swiperName);
+    new Swiper("." + this.swiperName, {
+      slidesPerView: 1,
+      spaceBetween: 30,
+      loop: true,
+      speed: 1000, //切换时长
+      autoplay: {
+        delay: 1500,
+        disableOnInteraction: false, //用户操作后是否停止轮播
+      },
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+      },
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+      },
+    });
   },
 };
 </script>
 
 <style lang='less' scoped>
+.swiperbtnstyle {
+  --swiper-theme-color: #f8e2e2; /* 下面小按钮颜色 */
+  --swiper-navigation-color: #ffffff7a; /* 两边按钮颜色 */
+  --swiper-navigation-size: 30px; /* 设置按钮大小 */
+}
 .floor {
   margin-top: 15px;
 

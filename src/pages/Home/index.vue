@@ -5,8 +5,12 @@
     <Recommend></Recommend>
     <Rank></Rank>
     <Like></Like>
-    <Floor></Floor>
-    <Floor></Floor>
+    <Floor
+      v-for="item in floorData"
+      :key="item.id"
+      :item="item"
+      :swiperName="'swiper' + item.id"
+    ></Floor>
     <Brand></Brand>
   </div>
 </template>
@@ -19,6 +23,7 @@ import Rank from "./Rank";
 import Like from "./Like";
 import Floor from "./Floor";
 import Brand from "./Brand";
+import { mapState } from "vuex";
 export default {
   name: "Home",
   components: {
@@ -29,6 +34,12 @@ export default {
     Like,
     Floor,
     Brand,
+  },
+  computed: {
+    ...mapState("home", ["floorData"]),
+  },
+  mounted() {
+    this.$store.dispatch("home/getFloorsDate");
   },
 };
 </script>

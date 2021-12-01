@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 // 引入分离出去的选项
 import home from './home'
+import search from './search'
 // console.log('home', home)
 
 Vue.use(Vuex)
@@ -17,6 +18,6 @@ const store = new Vuex.Store({
     // mutations,
     // actions,
     // getter,
-    modules: { home } //进一步细分，模块化管理，也可以嵌套子模块再细分
+    modules: { home, search } //进一步细分，模块化管理，也可以嵌套子模块再细分
 })
 export default store
